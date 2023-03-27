@@ -1,0 +1,19 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/My-Own-Library/back-end.git"
+  },
+  "author": "Rodrigo Antunes Araujo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/My-Own-Library/back-end/issues"
+  },
+  "homepage": "https://github.com/My-Own-Library/back-end#readme"
+}
