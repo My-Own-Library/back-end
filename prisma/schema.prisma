@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model evolution_points {
+  id                Int      @id @default(autoincrement())
+  date              DateTime @default(now()) @db.Date
+  topic_id          Int
+  proficiency_point Decimal  @db.Decimal(3, 1)
+  topics            topics   @relation(fields: [topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model folders {
+  id       Int      @id @default(autoincrement())
+  name     String
+  theme_id Int
+  themes   themes   @relation(fields: [theme_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  topics   topics[]
+}
+
+model projects {
+  id              Int               @id @default(autoincrement())
+  name            String
+  img_src         String?
+  url_direction   String?
+  expertise       Decimal           @db.Decimal(3, 1)
+  proficiency_up  Decimal?          @db.Decimal(3, 1)
+  topics_projects topics_projects[]
+}
+
+model sessions {
+  id      Int     @id @default(autoincrement())
+  token   String
+  user_id Int
+  active  Boolean @default(true)
+  users   users   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tasks {
+  id             Int            @id @default(autoincrement())
+  date           DateTime       @default(now()) @db.Date
+  state          Boolean        @default(false)
+  task_info_id   Int
+  tasks_schedule tasks_schedule @relation(fields: [task_info_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tasks_schedule {
+  id               Int            @id @default(autoincrement())
+  name             String
+  week_days        Int[]
+  month_dates      Int[]
+  proficiency_up   Decimal        @db.Decimal(3, 1)
+  proficiency_down Decimal        @db.Decimal(3, 1)
+  tasks            tasks[]
+  topics_tasks     topics_tasks[]
+}
+
+model themes {
+  id      Int       @id @default(autoincrement())
+  name    String
+  user_id Int
+  folders folders[]
+  users   users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  topics  topics[]
+}
+
+model topics {
+  id               Int                @id @default(autoincrement())
+  name             String
+  relevance        Decimal            @db.Decimal(3, 1)
+  proficiency      Decimal            @db.Decimal(3, 1)
+  folder_id        Int?
+  theme_id         Int?
+  evolution_points evolution_points[]
+  folders          folders?           @relation(fields: [folder_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  themes           themes?            @relation(fields: [theme_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  topics_projects  topics_projects[]
+  topics_tasks     topics_tasks[]
+}
+
+model topics_projects {
+  id          Int      @id @default(autoincrement())
+  topic_id    Int
+  projects_id Int
+  projects    projects @relation(fields: [projects_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  topics      topics   @relation(fields: [topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model topics_tasks {
+  id             Int            @id @default(autoincrement())
+  topic_id       Int
+  task_id        Int
+  tasks_schedule tasks_schedule @relation(fields: [task_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  topics         topics         @relation(fields: [topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id          Int        @id @default(autoincrement())
+  email       String
+  name        String?
+  password    String
+  description String?
+  sessions    sessions[]
+  themes      themes[]
+}
