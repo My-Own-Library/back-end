@@ -105,6 +105,7 @@ model users {
   name        String?
   password    String
   description String?
+  photo_src   String?    @unique
   sessions    sessions[]
   themes      themes[]
 }

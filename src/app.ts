@@ -3,18 +3,21 @@ import { connectDb, disconnectDB, loadEnv } from "./config"
 import { folderRouters, topicRouters, userRouters } from "./routers"
 import { themesRouters } from "./routers/themes-routers"
 import cors from "cors";
+import { upload } from "./middlewares/manage-images";
 
-loadEnv()
+loadEnv();
 
-export const app = express()
+const app = express();
 
 app
   .use(cors())
   .use(express.json())
+  .get("/health", (_req, res) => res.send("OK!"))
   .use("/themes", themesRouters)
   .use("/users", userRouters)
   .use("/topics", topicRouters)
   .use("/folders", folderRouters)
+  .post("/api", upload.single("photo"))
 
 
 export async function init(): Promise<Express> {
@@ -25,3 +28,5 @@ export async function init(): Promise<Express> {
 export async function close(): Promise<void> {
   await disconnectDB();
 }
+
+export default app;
