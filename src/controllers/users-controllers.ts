@@ -26,6 +26,7 @@ export async function signin(req: Request, res: Response){
     const userSession = await userServices.signinUser( email, password);
     return res.status(httpStatus.CREATED).send(userSession);
   } catch (error) {
+    console.log(error)
     if (error.name === "ConflictError") {
       return res.status(httpStatus.CONFLICT).send(error);
     }

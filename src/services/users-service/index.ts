@@ -30,9 +30,11 @@ async function signinUser(email: string, password: string) {
     throw ConflictError("email or passsword incorrect")
   }
 
-  const isValid = bcrypt.compare(password, userExist.password)
+  const isValid = bcrypt.compareSync(password, userExist.password)
 
-  if (!isValid) throw UnauthorizedError("email or passsword incorrect");
+  if (!isValid){
+   throw UnauthorizedError("email or passsword incorrect")
+  }
 
   const already_session = await sessionRepository.findSessionByUserId(id)
   
