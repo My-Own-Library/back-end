@@ -6,9 +6,9 @@ const folderRouters = Router()
 
 folderRouters
   .all("/*", authenticateToken)
-  .get("/in-themes/:themeId", getFoldersByTheme)
+  .get("/in-themes/:theme_id", getFoldersByTheme)
   .post("/", createFolder)
-  .put("/:folderId", updateFolder)
-  .delete("/:folderId", deleteFolder)
+  .put("/:folder_id", updateFolder)
+  .delete("/:folder_id", deleteFolder)
 
 export { folderRouters }

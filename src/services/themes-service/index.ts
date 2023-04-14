@@ -1,4 +1,4 @@
-import { ConflictError } from "@/errors"
+import { ConflictError, UnauthorizedError } from "@/errors"
 import { NotFoundError } from "@/errors/not-found-error"
 import themesRepository from "@/repositories/themes-repository"
 
@@ -19,7 +19,7 @@ async function updateTheme(user_id:number, theme_id: number, name: string) {
 
   if(!themeExist) throw NotFoundError("Theme not found")
 
-  if( themeExist.user_id !== user_id) throw ConflictError("Unauthorized theme owner")
+  if( themeExist.user_id !== user_id) throw UnauthorizedError("Unauthorized theme owner")
 
   return await themesRepository.updateTheme(theme_id, name)
 }
@@ -29,12 +29,12 @@ async function deleteTheme(theme_id: number, user_id: number) {
 
   if(!themeExist) throw NotFoundError("Theme not found")
 
-  if( themeExist.user_id !== user_id) throw ConflictError("Unauthorized theme owner")
+  if( themeExist.user_id !== user_id) throw UnauthorizedError("Unauthorized theme owner")
 
   return await themesRepository.deleteTheme(theme_id)
 }
 
-export const themeServices = { 
+export const themesServices = { 
   getThemes,
   createTheme,
   updateTheme,
