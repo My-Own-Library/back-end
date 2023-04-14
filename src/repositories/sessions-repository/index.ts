@@ -31,11 +31,23 @@ async function activateSession(session_id: number){
   });
 }
 
+async function deactivateSession(session_id: number){
+  return prismaDb.sessions.update({
+    where:{
+      id: session_id
+    },
+    data:{
+      active: false
+    }
+  });
+}
+
 
 const sessionRepository = {
   create,
   findSessionByUserId,
-  activateSession
+  activateSession,
+  deactivateSession
 };
 
 export default sessionRepository;

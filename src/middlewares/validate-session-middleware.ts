@@ -5,7 +5,6 @@ import { NextFunction, Response, Request } from "express";
 import httpStatus from "http-status";
 import * as jwt from "jsonwebtoken";
 
-
 export async function authenticateToken(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   const  authorization  = req.header("Authorization")
   if (!authorization) return unauthorizedError(res);
@@ -21,6 +20,7 @@ export async function authenticateToken(req: AuthenticatedRequest, res: Response
         token,
       },
     });
+    
     if (!session || !session.active) return unauthorizedError(res);
 
     req.user_id = user_id;

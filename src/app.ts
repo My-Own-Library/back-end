@@ -17,8 +17,6 @@ app
   .use("/users", userRouters)
   .use("/topics", topicRouters)
   .use("/folders", folderRouters)
-  .post("/api", upload.single("photo"))
-
 
 export async function init(): Promise<Express> {
   connectDb()

@@ -1,9 +1,10 @@
+import { authenticateToken } from "@/middlewares";
 import { Router } from "express";
 
 const projectsRouters = Router()
 
 projectsRouters
-  .all("/*",)
+  .all("/*", authenticateToken)
   .get("/by-theme/:themeId",)
   .post("/",)
   .put("/:projectId",)

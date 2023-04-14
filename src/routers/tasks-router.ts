@@ -1,3 +1,4 @@
+import { authenticateToken } from "@/middlewares";
 import { Router } from "express";
 
 const tasksRouters = Router()
@@ -5,7 +6,7 @@ const tasksRouters = Router()
 //taskSchedule in DB
 
 tasksRouters
-  .all("/*",)
+  .all("/*", authenticateToken)
   .get("/by-theme/:themeId",)
   .post("/",)
   .put("/:taskId",)

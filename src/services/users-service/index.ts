@@ -1,16 +1,14 @@
 import { ConflictError } from "@/errors/conflict-error"
+import { NotFoundError } from "@/errors/not-found-error";
 import { UnauthorizedError } from "@/errors/unauthorized-error";
 import sessionRepository from "@/repositories/sessions-repository";
 import userRepository from "@/repositories/users-repository"
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-async function createUser(email: string, password: string): Promise<{email: string, password: string}> {
+async function createUser(email: string, password: string) {
 
-  console.log(email)
   const emailExist = await userRepository.findByEmail(email)
-
-  console.log(emailExist)
 
   if(emailExist){
     throw ConflictError("Email already in use")
@@ -48,7 +46,20 @@ async function signinUser(email: string, password: string) {
   return await sessionRepository.create({user_id: id, token: session})
 }
 
+async function logoutUser(user_id: number) {
+  const userExist = await userRepository.findById(user_id)
+
+  if(!userExist) throw NotFoundError("User not registred")
+  
+  const sessionExist = await sessionRepository.findSessionByUserId(user_id)
+
+  if(!sessionExist) throw NotFoundError("User does not have session")
+
+  return sessionRepository.deactivateSession(sessionExist.id)
+}
+
 export const userServices ={
   createUser,
-  signinUser
+  signinUser,
+  logoutUser
 }

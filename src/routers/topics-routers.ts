@@ -1,15 +1,15 @@
+import { createTopic, deleteTopic, getTopicsByFolder, getTopicsByTheme, updateTopic } from "@/controllers";
+import { authenticateToken } from "@/middlewares";
 import { Router } from "express";
 
 const topicRouters = Router()
 
 topicRouters
-  .all("/*",)
-  .get("/in-themes/:themeId",)
-  .get("/in-folders/:folderId")
-  .post("/")
-  .put("/:topicId",)
-  .patch("/link/to-folders/:folderId")
-  .patch("/link/to-themes/:folderId")
-  .delete("/:topicId")
+  .all("/*", authenticateToken)
+  .get("/in-themes/:themeId", getTopicsByTheme)
+  .get("/in-folders/:folderId", getTopicsByFolder)
+  .post("/", createTopic)
+  .put("/:topicId", updateTopic)
+  .delete("/:topicId", deleteTopic)
 
 export { topicRouters }

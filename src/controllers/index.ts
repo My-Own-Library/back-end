@@ -1,3 +1,6 @@
 export * from "./evolution-controllers"
 export * from "./folders-controllers"
-export * from "./evolution-controllers"
+export * from "./themes-controllers"
+export * from "./projects-controllers"
+export * from "./tasks-controllers"
+export * from "./topics-controllers"

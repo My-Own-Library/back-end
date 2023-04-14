@@ -1,9 +1,10 @@
+import { AuthenticatedRequest } from "@/protocols";
 import { userServices } from "@/services";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
 export async function signup(req: Request, res: Response){
-  const {email, password} =req.body
+  const { email, password } =req.body
 
   try{
     const user = await userServices.createUser( email, password);
@@ -20,13 +21,12 @@ export async function signup(req: Request, res: Response){
 }
 
 export async function signin(req: Request, res: Response){
-  const {email, password} =req.body
+  const { email, password } =req.body
 
   try{
     const userSession = await userServices.signinUser( email, password);
     return res.status(httpStatus.CREATED).send(userSession);
   } catch (error) {
-    console.log(error)
     if (error.name === "ConflictError") {
       return res.status(httpStatus.CONFLICT).send(error);
     }
@@ -36,11 +36,14 @@ export async function signin(req: Request, res: Response){
   }
 }
 
-export async function logout(req: Request, res: Response){
+export async function logout(req: AuthenticatedRequest, res: Response){
 
   try{
-
-  }catch(err){
-    
+    await userServices.logoutUser(req.user_id)
+    return  res.status(httpStatus.OK)
+  }catch(error){
+    if (error.name === "NotFoundError") {
+      return res.status(httpStatus.NOT_FOUND).send(error);
+    }
   }
 }
