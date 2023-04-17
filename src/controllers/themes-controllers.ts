@@ -6,7 +6,7 @@ import httpStatus from "http-status";
 export async function getThemes(req: AuthenticatedRequest, res: Response){
 
   try{
-    const themes =  await themesServices.getThemes(req.user_id)    
+    const themes =  await themesServices.getThemes(req.user_id)   
     return res.status(httpStatus.OK).send(themes)
 
   }catch(err){
@@ -19,7 +19,7 @@ export async function createTheme(req: AuthenticatedRequest, res: Response){
 
   try{
     const theme = await themesServices.createTheme(name, req.user_id)
-    return res.status(httpStatus.CREATED).send(theme.name)
+    return res.status(httpStatus.CREATED).send(theme)
 
   }catch(error){
     if (error.name === "ConflictError") {
@@ -51,8 +51,8 @@ export async function deleteTheme(req: AuthenticatedRequest, res: Response){
   const { theme_id } = req.params 
 
   try{
-    await themesServices.deleteTheme(req.user_id, Number(theme_id))
-    return res.status(httpStatus.OK)
+    await themesServices.deleteTheme(Number(theme_id), req.user_id )
+    return res.sendStatus(httpStatus.OK)
 
   }catch(error){
     if (error.name === "UnauthorizedError") {

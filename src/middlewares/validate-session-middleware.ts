@@ -13,8 +13,6 @@ export async function authenticateToken(req: AuthenticatedRequest, res: Response
   if (!token) return unauthorizedError(res);
 
   try {
-    const { user_id } = jwt.verify(token, process.env.JWT_SECRET) as jwt.JwtPayload;
-
     const session = await prismaDb.sessions.findFirst({
       where: {
         token,
@@ -23,7 +21,7 @@ export async function authenticateToken(req: AuthenticatedRequest, res: Response
     
     if (!session || !session.active) return unauthorizedError(res);
 
-    req.user_id = user_id;
+    req.user_id = session.user_id;
 
     return next();
   } catch (err) {

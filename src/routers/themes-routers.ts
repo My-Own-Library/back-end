@@ -1,5 +1,6 @@
 import { createTheme, deleteTheme, getThemes, updateTheme } from "@/controllers";
-import { authenticateToken } from "@/middlewares";
+import { authenticateToken, validateBody } from "@/middlewares";
+import { JustNameSchema } from "@/models/theme-schema";
 import { Router } from "express";
 
 const themesRouters = Router()
@@ -7,8 +8,8 @@ const themesRouters = Router()
 themesRouters
   .all("/*", authenticateToken)
   .get("/", getThemes)
-  .post("/", createTheme)
-  .put("/:theme_id", updateTheme)
+  .post("/",validateBody(JustNameSchema) , createTheme)
+  .put("/:theme_id",validateBody(JustNameSchema),  updateTheme)
   .delete("/:theme_id", deleteTheme)
 
 export { themesRouters }

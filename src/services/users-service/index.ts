@@ -22,11 +22,11 @@ async function createUser(email: string, password: string) {
 
 async function signinUser(email: string, password: string) {
   const userExist = await userRepository.findByEmail(email)
-  const id = userExist.id
-
   if(!userExist){
-    throw ConflictError("email or passsword incorrect")
+    throw UnauthorizedError("email or passsword incorrect")
   }
+
+  const id = userExist.id
 
   const isValid = bcrypt.compareSync(password, userExist.password)
 
@@ -55,7 +55,7 @@ async function logoutUser(user_id: number) {
 
   if(!sessionExist) throw NotFoundError("User does not have session")
 
-  return sessionRepository.deactivateSession(sessionExist.id)
+  return await sessionRepository.deactivateSession(sessionExist.id)
 }
 
 export const userServices ={

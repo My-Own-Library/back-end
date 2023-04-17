@@ -13,10 +13,9 @@ export async function signup(req: Request, res: Response){
       email: user.email
     });
   } catch (error) {
-    if (error.name === "DuplicatedEmailError") {
+    if (error.name === "ConflictError") {
       return res.status(httpStatus.CONFLICT).send(error);
     }
-    return res.status(httpStatus.BAD_REQUEST).send(error);
   }
 }
 
@@ -27,9 +26,6 @@ export async function signin(req: Request, res: Response){
     const userSession = await userServices.signinUser( email, password);
     return res.status(httpStatus.CREATED).send(userSession);
   } catch (error) {
-    if (error.name === "ConflictError") {
-      return res.status(httpStatus.CONFLICT).send(error);
-    }
     if (error.name === "UnauthorizedError") {
       return res.status(httpStatus.UNAUTHORIZED).send(error);
     }
@@ -37,10 +33,9 @@ export async function signin(req: Request, res: Response){
 }
 
 export async function logout(req: AuthenticatedRequest, res: Response){
-
   try{
     await userServices.logoutUser(req.user_id)
-    return  res.status(httpStatus.OK)
+    return res.sendStatus(httpStatus.OK)
   }catch(error){
     if (error.name === "NotFoundError") {
       return res.status(httpStatus.NOT_FOUND).send(error);

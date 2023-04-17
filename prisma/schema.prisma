@@ -44,7 +44,7 @@ model sessions {
 model tasks {
   id             Int            @id @default(autoincrement())
   date           DateTime       @default(now()) @db.Date
-  state          Boolean        @default(false)
+  state          Boolean?
   task_info_id   Int
   tasks_schedule tasks_schedule @relation(fields: [task_info_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -64,6 +64,7 @@ model themes {
   id      Int       @id @default(autoincrement())
   name    String
   user_id Int
+  date    DateTime? @default(now()) @db.Date
   folders folders[]
   users   users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   topics  topics[]
